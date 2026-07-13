@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadastro de Alunos — Gracie Barra Encantado/RS</title>
+<meta name="description" content="Preencha sua ficha de cadastro da academia Gracie Barra de Encantado/RS. Leva menos de 2 minutos.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cadastro de Alunos — Gracie Barra Encantado/RS">
+<meta property="og:description" content="Preencha sua ficha de cadastro da academia. Leva menos de 2 minutos.">
+<meta property="og:site_name" content="Gracie Barra Encantado/RS">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://graciebarra-encantado.github.io/cadastro/">
+<meta property="og:image" content="https://graciebarra-encantado.github.io/cadastro/logo.png">
+<style>
+  :root {
+    --red: #C8102E; --red-dark: #A50D26; --navy: #10223F; --navy-deep: #0A1729;
+    --ink: #1B2434; --muted: #556075; --border: #D8D4C8; --paper: #F2F0E9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+    min-height: 100vh; color: var(--ink); padding: 1rem;
+  }
+  .wrap { max-width: 540px; margin: 0 auto; }
+  .head { text-align: center; color: #fff; padding: 1.25rem 0 1rem; }
+  .head h1 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.12em; }
+  .head p { font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-top: 0.35rem; }
+  .card {
+    background: #fff; border-radius: 10px; border-top: 4px solid var(--red);
+    padding: 1.5rem 1.25rem 2rem; box-shadow: 0 18px 44px rgba(0,0,0,0.35);
+  }
+  .sec {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
+    color: var(--red); margin: 1.4rem 0 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border);
+  }
+  .sec:first-child { margin-top: 0; }
+  label.field { display: block; font-size: 0.78rem; font-weight: 700; color: var(--ink); margin: 0.85rem 0 0.25rem; }
+  label.field .opt { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=tel], input[type=email], input[type=date], select, textarea {
+    width: 100%; padding: 0.7rem 0.75rem; border: 1.5px solid var(--border); border-radius: 6px;
+    font-size: 1rem; color: var(--ink); background: #fff; outline: none; font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(200,16,46,0.12); }
+  textarea { resize: vertical; min-height: 70px; }
+  .row { display: flex; gap: 0.75rem; }
+  .row > div { flex: 1; }
+  .checks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem; }
+  .check {
+    display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.55rem 0.8rem;
+    border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.9rem; cursor: pointer; user-select: none;
+  }
+  .check:has(input:checked) { border-color: var(--red); background: rgba(200,16,46,0.06); font-weight: 700; }
+  .check input { accent-color: var(--red); width: 17px; height: 17px; }
+  #guardian { display: none; background: #FCF6E6; border: 1.5px solid #E5CE96; border-radius: 8px; padding: 0.9rem; margin-top: 0.9rem; }
+  #guardian.show { display: block; }
+  #guardian .gtitle { font-size: 0.8rem; font-weight: 700; color: #8A5A06; }
+  button.submit {
+    width: 100%; margin-top: 1.6rem; padding: 0.95rem; border: none; border-radius: 6px;
+    background: var(--red); color: #fff; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; cursor: pointer;
+  }
+  button.submit:hover { background: var(--red-dark); }
+  button.submit:disabled { opacity: 0.6; }
+  .err { display: none; margin-top: 1rem; padding: 0.75rem 0.9rem; background: #FBE9EC; border: 1.5px solid #E8A9B4; border-radius: 6px; color: #8E0B21; font-size: 0.88rem; }
+  .err.show { display: block; }
+  #done { display: none; text-align: center; padding: 2.5rem 1rem; }
+  #done.show { display: block; }
+  #done .big { font-size: 2.4rem; }
+  #done h2 { margin: 0.75rem 0 0.4rem; font-size: 1.15rem; }
+  #done p { color: var(--muted); font-size: 0.92rem; }
+  .foot { text-align: center; color: rgba(255,255,255,0.45); font-size: 0.75rem; padding: 1.25rem 0 0.5rem; }
+  .hp { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <img src="logo.png" alt="Gracie Barra" style="width:110px;height:110px;object-fit:contain;background:#fff;border-radius:12px;padding:6px;margin-bottom:0.6rem;">
+    <h1>Gracie Barra</h1>
+    <p>Encantado/RS — Ficha de cadastro de aluno</p>
+  </div>
+  <div class="card">
+    <form id="f" novalidate>
+      <div id="formArea">
+        <div class="sec">Dados pessoais</div>
+        <label class="field">Nome completo *</label>
+        <input type="text" name="full_name" maxlength="150" required autocomplete="name" placeholder="Seu nome completo">
+        <div class="row">
+          <div>
+            <label class="field">Apelido <span class="opt">(opcional)</span></label>
+            <input type="text" name="nickname" maxlength="80">
+          </div>
+          <div>
+            <label class="field">Nascimento *</label>
+            <input type="date" name="birth_date" required>
+          </div>
+        </div>
+        <label class="field">Telefone / WhatsApp *</label>
+        <input type="tel" name="phone" maxlength="30" required placeholder="(00) 00000-0000" autocomplete="tel">
+        <label class="field">E-mail <span class="opt">(opcional)</span></label>
+        <input type="email" name="email" maxlength="150" autocomplete="email" placeholder="voce@exemplo.com">
+        <label class="field">Cidade</label>
+        <input type="text" name="city" maxlength="100" autocomplete="address-level2">
+        <label class="field">Endereço completo</label>
+        <input type="text" name="address" maxlength="300" autocomplete="street-address" placeholder="Rua, número, bairro">
+
+        <div id="guardian">
+          <div class="gtitle">Menor de 18 anos — dados do responsável</div>
+          <label class="field">Nome do responsável</label>
+          <input type="text" name="guardian_name" maxlength="150">
+          <label class="field">Telefone do responsável</label>
+          <input type="tel" name="guardian_phone" maxlength="30" placeholder="(00) 00000-0000">
+        </div>
+
+        <div class="sec">Treino</div>
+        <label class="field">Modalidades que pratica / quer praticar</label>
+        <div class="checks" id="mods"></div>
+        <div class="row">
+          <div>
+            <label class="field">Cor da faixa</label>
+            <select name="belt_color" id="belt"><option value="">Selecionar</option></select>
+          </div>
+          <div>
+            <label class="field">Grau</label>
+            <select name="belt_degree">
+              <option value="0">Sem grau</option><option value="1">1°</option><option value="2">2°</option>
+              <option value="3">3°</option><option value="4">4°</option>
+            </select>
+          </div>
+        </div>
+        <label class="field">Treina desde <span class="opt">(aproximado, opcional)</span></label>
+        <input type="date" name="start_date">
+
+        <div class="sec">Saúde e observações</div>
+        <label class="field">Alergias, lesões, condições de saúde ou outras observações <span class="opt">(opcional)</span></label>
+        <textarea name="notes" maxlength="2000"></textarea>
+
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
+
+        <div class="err" id="err"></div>
+        <button type="submit" class="submit" id="btn">Enviar cadastro</button>
+      </div>
+      <div id="done">
+        <div class="big">🥋</div>
+        <h2>Cadastro enviado!</h2>
+        <p>Obrigado! Seus dados foram recebidos e serão revisados pela equipe da academia.</p>
+      </div>
+    </form>
+  </div>
+  <div class="foot">Gracie Barra — Encantado, RS</div>
+</div>
+<script>
+  var API = 'https://suifweikufpvyifmrnwe.supabase.co/functions/v1/matricula';
+  var BELTS = ['Branca','Cinza','Amarela','Laranja','Verde','Azul','Roxa','Marrom','Preta','Coral (Master)'];
+  var MODS_FALLBACK = ['Boxe','Jiu-Jitsu','Jiu-Jitsu Kids','Muay Thai'];
+
+  var beltSel = document.getElementById('belt');
+  BELTS.forEach(function (b) {
+    var o = document.createElement('option'); o.value = b; o.textContent = b; beltSel.appendChild(o);
+  });
+
+  function renderMods(list) {
+    document.getElementById('mods').innerHTML = list.map(function (m) {
+      var name = String(m).replace(/[&<>"']/g, '');
+      return '<label class="check"><input type="checkbox" name="modalities" value="' + name + '"> ' + name + '</label>';
+    }).join('');
+  }
+  renderMods(MODS_FALLBACK);
+  fetch(API).then(function (r) { return r.json(); }).then(function (d) {
+    if (d && d.success && Array.isArray(d.modalities) && d.modalities.length) renderMods(d.modalities);
+  }).catch(function () {});
+
+  var f = document.getElementById('f');
+  var birth = f.elements['birth_date'];
+  birth.addEventListener('change', function () {
+    if (!birth.value) return;
+    var age = (Date.now() - new Date(birth.value + 'T00:00:00')) / 31557600000;
+    document.getElementById('guardian').classList.toggle('show', age < 18);
+  });
+
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('err');
+    err.classList.remove('show');
+    var data = {};
+    new FormData(f).forEach(function (v, k) { data[k] = v; });
+    data.modalities = Array.prototype.map.call(
+      f.querySelectorAll('input[name=modalities]:checked'), function (c) { return c.value; }
+    );
+    if (!data.full_name || data.full_name.trim().length < 5) {
+      err.textContent = 'Informe seu nome completo.'; err.classList.add('show'); return;
+    }
+    if (!data.birth_date) { err.textContent = 'Informe sua data de nascimento.'; err.classList.add('show'); return; }
+    if (!data.phone || data.phone.trim().length < 8) {
+      err.textContent = 'Informe um telefone válido.'; err.classList.add('show'); return;
+    }
+    var btn = document.getElementById('btn');
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function (res) {
+      return res.json().then(function (out) {
+        if (!res.ok || !out.success) throw new Error(out.message || 'erro');
+        document.getElementById('formArea').style.display = 'none';
+        document.getElementById('done').classList.add('show');
+        window.scrollTo(0, 0);
+      });
+    }).catch(function () {
+      err.textContent = 'Não foi possível enviar. Verifique sua conexão e tente novamente.';
+      err.classList.add('show');
+      btn.disabled = false; btn.textContent = 'Enviar cadastro';
+    });
+  });
+</script>
+</body>
+</html>
