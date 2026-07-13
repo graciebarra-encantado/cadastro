@@ -38,7 +38,7 @@
   .sec:first-child { margin-top: 0; }
   label.field { display: block; font-size: 0.78rem; font-weight: 700; color: var(--ink); margin: 0.85rem 0 0.25rem; }
   label.field .opt { font-weight: 400; color: var(--muted); }
-  input[type=text], input[type=tel], input[type=email], input[type=date], select, textarea {
+  input[type=text], input[type=tel], input[type=email], select, textarea {
     width: 100%; padding: 0.7rem 0.75rem; border: 1.5px solid var(--border); border-radius: 6px;
     font-size: 1rem; color: var(--ink); background: #fff; outline: none; font-family: inherit;
   }
@@ -93,7 +93,7 @@
           </div>
           <div>
             <label class="field">Nascimento *</label>
-            <input type="date" name="birth_date" required>
+            <input type="text" name="birth_date" inputmode="numeric" maxlength="10" required placeholder="dd/mm/aaaa" autocomplete="bday">
           </div>
         </div>
         <label class="field">Telefone / WhatsApp *</label>
@@ -130,7 +130,7 @@
           </div>
         </div>
         <label class="field">Treina desde <span class="opt">(aproximado, opcional)</span></label>
-        <input type="date" name="start_date">
+        <input type="text" name="start_date" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa">
 
         <div class="sec">Saúde e observações</div>
         <label class="field">Alergias, lesões, condições de saúde ou outras observações <span class="opt">(opcional)</span></label>
@@ -172,10 +172,34 @@
   }).catch(function () {});
 
   var f = document.getElementById('f');
+
+  function maskDate(input) {
+    input.addEventListener('input', function () {
+      var d = input.value.replace(/\D/g, '').slice(0, 8);
+      var out = d.slice(0, 2);
+      if (d.length > 2) out += '/' + d.slice(2, 4);
+      if (d.length > 4) out += '/' + d.slice(4);
+      input.value = out;
+    });
+  }
+  maskDate(f.elements['birth_date']);
+  maskDate(f.elements['start_date']);
+
+  function parseBR(v) {
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v);
+    if (!m) return null;
+    var day = +m[1], month = +m[2], year = +m[3];
+    var dt = new Date(year, month - 1, day);
+    if (year < 1900 || dt.getFullYear() !== year || dt.getMonth() !== month - 1 || dt.getDate() !== day) return null;
+    if (dt > new Date()) return null;
+    return m[3] + '-' + m[2] + '-' + m[1];
+  }
+
   var birth = f.elements['birth_date'];
-  birth.addEventListener('change', function () {
-    if (!birth.value) return;
-    var age = (Date.now() - new Date(birth.value + 'T00:00:00')) / 31557600000;
+  birth.addEventListener('input', function () {
+    var iso = parseBR(birth.value);
+    if (!iso) return;
+    var age = (Date.now() - new Date(iso + 'T00:00:00')) / 31557600000;
     document.getElementById('guardian').classList.toggle('show', age < 18);
   });
 
@@ -192,6 +216,20 @@
       err.textContent = 'Informe seu nome completo.'; err.classList.add('show'); return;
     }
     if (!data.birth_date) { err.textContent = 'Informe sua data de nascimento.'; err.classList.add('show'); return; }
+    var birthISO = parseBR(data.birth_date);
+    if (!birthISO) {
+      err.textContent = 'Data de nascimento inválida. Digite no formato dia/mês/ano, ex: 15/03/1990.';
+      err.classList.add('show'); return;
+    }
+    data.birth_date = birthISO;
+    if (data.start_date) {
+      var startISO = parseBR(data.start_date);
+      if (!startISO) {
+        err.textContent = 'Data "treina desde" inválida. Digite no formato dia/mês/ano ou deixe em branco.';
+        err.classList.add('show'); return;
+      }
+      data.start_date = startISO;
+    }
     if (!data.phone || data.phone.trim().length < 8) {
       err.textContent = 'Informe um telefone válido.'; err.classList.add('show'); return;
     }
