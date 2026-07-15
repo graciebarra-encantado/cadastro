@@ -186,7 +186,7 @@
         <button type="submit" class="submit" id="btn">Enviar cadastro</button>
       </div>
       <div id="done">
-        <div class="big">🥋</div>
+        <div class="big" id="doneIcon">🥋</div>
         <h2>Cadastro enviado!</h2>
         <p>Obrigado! Seus dados foram recebidos e serão revisados pela equipe da academia.</p>
       </div>
@@ -331,6 +331,7 @@
     }).then(function (res) {
       return res.json().then(function (out) {
         if (!res.ok || !out.success) throw new Error(out.message || 'erro');
+        document.getElementById('doneIcon').textContent = academy === 'centurion' ? '🥊' : '🥋';
         document.getElementById('formArea').style.display = 'none';
         document.getElementById('done').classList.add('show');
         window.scrollTo(0, 0);
