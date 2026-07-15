@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cadastro de Alunos — Gracie Barra Encantado/RS</title>
-<meta name="description" content="Preencha sua ficha de cadastro da academia Gracie Barra de Encantado/RS. Leva menos de 2 minutos.">
+<title>Cadastro de Alunos — Encantado/RS</title>
+<meta name="description" content="Preencha sua ficha de cadastro — Gracie Barra e CT Centurion, Encantado/RS. Leva menos de 2 minutos.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Cadastro de Alunos — Gracie Barra Encantado/RS">
-<meta property="og:description" content="Preencha sua ficha de cadastro da academia. Leva menos de 2 minutos.">
-<meta property="og:site_name" content="Gracie Barra Encantado/RS">
+<meta property="og:title" content="Cadastro de Alunos — Encantado/RS">
+<meta property="og:description" content="Preencha sua ficha de cadastro — Gracie Barra e CT Centurion. Leva menos de 2 minutos.">
+<meta property="og:site_name" content="Gracie Barra &amp; CT Centurion — Encantado/RS">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:url" content="https://graciebarra-encantado.github.io/cadastro/">
 <meta property="og:image" content="https://graciebarra-encantado.github.io/cadastro/logo.png">
@@ -23,8 +23,18 @@
     background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
     min-height: 100vh; color: var(--ink); padding: 1rem;
   }
+  body.centurion {
+    --red: #1E3FA4; --red-dark: #152E7C; --navy: #182F86; --navy-deep: #0C173F;
+  }
+  body.centurion .card { border-top-color: #FFCB05; }
+  body.centurion input:focus, body.centurion select:focus, body.centurion textarea:focus {
+    box-shadow: 0 0 0 3px rgba(30,63,164,0.14);
+  }
+  body.centurion .check:has(input:checked) { background: rgba(30,63,164,0.07); }
   .wrap { max-width: 540px; margin: 0 auto; }
   .head { text-align: center; color: #fff; padding: 1.25rem 0 1rem; }
+  .head img { width: 110px; height: 110px; object-fit: contain; background: #fff; border-radius: 12px; padding: 6px; margin-bottom: 0.6rem; display: none; }
+  .head img.show { display: inline-block; }
   .head h1 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .head p { font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-top: 0.35rem; }
   .card {
@@ -36,6 +46,21 @@
     color: var(--red); margin: 1.4rem 0 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border);
   }
   .sec:first-child { margin-top: 0; }
+  .academy {
+    display: flex; align-items: center; gap: 1rem; width: 100%; margin-top: 0.75rem;
+    padding: 0.9rem 1rem; border: 1.5px solid var(--border); border-radius: 10px;
+    background: #fff; cursor: pointer; font-family: inherit; text-align: left; font-size: 1rem;
+  }
+  .academy:hover { border-color: #C8102E; box-shadow: 0 0 0 3px rgba(200,16,46,0.10); }
+  .academy.ct:hover { border-color: #1E3FA4; box-shadow: 0 0 0 3px rgba(30,63,164,0.12); }
+  .academy img { width: 62px; height: 62px; object-fit: contain; }
+  .academy b { display: block; font-size: 1rem; color: var(--ink); }
+  .academy small { color: var(--muted); font-size: 0.82rem; }
+  .academy .arr { margin-left: auto; color: var(--muted); font-size: 1.3rem; }
+  .back {
+    display: inline-block; font-size: 0.8rem; color: var(--muted); text-decoration: none; margin-bottom: 0.9rem;
+  }
+  .back:hover { color: var(--red); }
   label.field { display: block; font-size: 0.78rem; font-weight: 700; color: var(--ink); margin: 0.85rem 0 0.25rem; }
   label.field .opt { font-weight: 400; color: var(--muted); }
   input[type=text], input[type=tel], input[type=email], select, textarea {
@@ -76,13 +101,30 @@
 <body>
 <div class="wrap">
   <div class="head">
-    <img src="logo.png" alt="Gracie Barra" style="width:110px;height:110px;object-fit:contain;background:#fff;border-radius:12px;padding:6px;margin-bottom:0.6rem;">
-    <h1>Gracie Barra</h1>
-    <p>Encantado/RS — Ficha de cadastro de aluno</p>
+    <img src="logo.png" alt="Gracie Barra" id="logoGracie">
+    <img src="centurion.png" alt="CT Centurion" id="logoCenturion">
+    <h1 id="headTitle">Ficha de Cadastro de Aluno</h1>
+    <p id="headSub">Encantado/RS — escolha sua academia</p>
   </div>
-  <div class="card">
+
+  <div class="card" id="chooseCard">
+    <div class="sec">Onde você vai treinar?</div>
+    <button type="button" class="academy" data-academy="gracie">
+      <img src="logo.png" alt="Gracie Barra">
+      <span><b>Gracie Barra</b><small>Jiu-Jitsu</small></span>
+      <span class="arr">›</span>
+    </button>
+    <button type="button" class="academy ct" data-academy="centurion">
+      <img src="centurion.png" alt="CT Centurion">
+      <span><b>CT Centurion</b><small>Muay Thai • Boxe</small></span>
+      <span class="arr">›</span>
+    </button>
+  </div>
+
+  <div class="card" id="formCard" style="display:none">
     <form id="f" novalidate>
       <div id="formArea">
+        <a href="#" class="back" id="back">‹ Escolher outra academia</a>
         <div class="sec">Dados pessoais</div>
         <label class="field">Nome completo *</label>
         <input type="text" name="full_name" maxlength="150" required autocomplete="name" placeholder="Seu nome completo">
@@ -114,9 +156,11 @@
         </div>
 
         <div class="sec">Treino</div>
-        <label class="field">Modalidades que pratica / quer praticar</label>
-        <div class="checks" id="mods"></div>
-        <div class="row">
+        <div id="modsBlock">
+          <label class="field">Modalidades que pratica / quer praticar</label>
+          <div class="checks" id="mods"></div>
+        </div>
+        <div class="row" id="beltRow">
           <div>
             <label class="field">Cor da faixa</label>
             <select name="belt_color" id="belt"><option value="">Selecionar</option></select>
@@ -148,12 +192,16 @@
       </div>
     </form>
   </div>
-  <div class="foot">Gracie Barra — Encantado, RS</div>
+  <div class="foot" id="foot">Encantado, RS</div>
 </div>
 <script>
   var API = 'https://suifweikufpvyifmrnwe.supabase.co/functions/v1/matricula';
   var BELTS = ['Branca','Cinza','Amarela','Laranja','Verde','Azul','Roxa','Marrom','Preta','Coral (Master)'];
-  var MODS_FALLBACK = ['Boxe','Jiu-Jitsu','Jiu-Jitsu Kids','Muay Thai'];
+  var ACADEMIES = {
+    gracie: { name: 'Gracie Barra', logo: 'logoGracie', modalities: ['Jiu-Jitsu', 'Jiu-Jitsu Kids'] },
+    centurion: { name: 'CT Centurion', logo: 'logoCenturion', modalities: ['Muay Thai', 'Boxe'] }
+  };
+  var academy = null;
 
   var beltSel = document.getElementById('belt');
   BELTS.forEach(function (b) {
@@ -166,10 +214,41 @@
       return '<label class="check"><input type="checkbox" name="modalities" value="' + name + '"> ' + name + '</label>';
     }).join('');
   }
-  renderMods(MODS_FALLBACK);
-  fetch(API).then(function (r) { return r.json(); }).then(function (d) {
-    if (d && d.success && Array.isArray(d.modalities) && d.modalities.length) renderMods(d.modalities);
-  }).catch(function () {});
+
+  function choose(key) {
+    academy = key;
+    var a = ACADEMIES[key];
+    document.body.classList.toggle('centurion', key === 'centurion');
+    document.getElementById('logoGracie').classList.toggle('show', key === 'gracie');
+    document.getElementById('logoCenturion').classList.toggle('show', key === 'centurion');
+    document.getElementById('headTitle').textContent = a.name;
+    document.getElementById('headSub').textContent = 'Encantado/RS — Ficha de cadastro de aluno';
+    document.getElementById('foot').textContent = a.name + ' — Encantado, RS';
+    // Faixa/grau é coisa de Jiu-Jitsu — só aparece na Gracie Barra
+    document.getElementById('beltRow').style.display = key === 'centurion' ? 'none' : '';
+    renderMods(a.modalities);
+    document.getElementById('chooseCard').style.display = 'none';
+    document.getElementById('formCard').style.display = '';
+    window.scrollTo(0, 0);
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.academy'), function (b) {
+    b.addEventListener('click', function () { choose(b.getAttribute('data-academy')); });
+  });
+
+  document.getElementById('back').addEventListener('click', function (e) {
+    e.preventDefault();
+    academy = null;
+    document.body.classList.remove('centurion');
+    document.getElementById('logoGracie').classList.remove('show');
+    document.getElementById('logoCenturion').classList.remove('show');
+    document.getElementById('headTitle').textContent = 'Ficha de Cadastro de Aluno';
+    document.getElementById('headSub').textContent = 'Encantado/RS — escolha sua academia';
+    document.getElementById('foot').textContent = 'Encantado, RS';
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('chooseCard').style.display = '';
+    window.scrollTo(0, 0);
+  });
 
   var f = document.getElementById('f');
 
@@ -195,13 +274,19 @@
     return m[3] + '-' + m[2] + '-' + m[1];
   }
 
+  // Responsável aparece para menores de 18 ou quando marcar Jiu-Jitsu Kids
   var birth = f.elements['birth_date'];
-  birth.addEventListener('input', function () {
+  function updateGuardian() {
+    var minor = false;
     var iso = parseBR(birth.value);
-    if (!iso) return;
-    var age = (Date.now() - new Date(iso + 'T00:00:00')) / 31557600000;
-    document.getElementById('guardian').classList.toggle('show', age < 18);
-  });
+    if (iso) {
+      minor = (Date.now() - new Date(iso + 'T00:00:00')) / 31557600000 < 18;
+    }
+    var kids = !!f.querySelector('input[name=modalities][value="Jiu-Jitsu Kids"]:checked');
+    document.getElementById('guardian').classList.toggle('show', minor || kids);
+  }
+  birth.addEventListener('input', updateGuardian);
+  document.getElementById('mods').addEventListener('change', updateGuardian);
 
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -212,6 +297,10 @@
     data.modalities = Array.prototype.map.call(
       f.querySelectorAll('input[name=modalities]:checked'), function (c) { return c.value; }
     );
+    if (academy === 'centurion') {
+      delete data.belt_color;
+      delete data.belt_degree;
+    }
     if (!data.full_name || data.full_name.trim().length < 5) {
       err.textContent = 'Informe seu nome completo.'; err.classList.add('show'); return;
     }
