@@ -167,10 +167,7 @@
           </div>
           <div>
             <label class="field">Grau</label>
-            <select name="belt_degree">
-              <option value="0">Sem grau</option><option value="1">1°</option><option value="2">2°</option>
-              <option value="3">3°</option><option value="4">4°</option>
-            </select>
+            <select name="belt_degree" id="degree"></select>
           </div>
         </div>
         <label class="field">Treina desde <span class="opt">(aproximado, opcional)</span></label>
@@ -207,6 +204,24 @@
   BELTS.forEach(function (b) {
     var o = document.createElement('option'); o.value = b; o.textContent = b; beltSel.appendChild(o);
   });
+
+  // Graus permitidos por faixa (padrão IBJJF): coloridas 0–4; Preta 0–6;
+  // Coral vermelha-e-preta = 7° grau e vermelha-e-branca = 8° grau.
+  var degreeSel = document.getElementById('degree');
+  function beltDegrees(color) {
+    if (color === 'Preta') return [0, 1, 2, 3, 4, 5, 6];
+    if (color === 'Coral (Master)') return [7, 8];
+    return [0, 1, 2, 3, 4];
+  }
+  function renderDegrees() {
+    var current = degreeSel.value;
+    degreeSel.innerHTML = beltDegrees(beltSel.value).map(function (g) {
+      return '<option value="' + g + '">' + (g === 0 ? 'Sem grau' : g + '°') + '</option>';
+    }).join('');
+    if (current && degreeSel.querySelector('option[value="' + current + '"]')) degreeSel.value = current;
+  }
+  beltSel.addEventListener('change', renderDegrees);
+  renderDegrees();
 
   function renderMods(list) {
     document.getElementById('mods').innerHTML = list.map(function (m) {
